@@ -1,0 +1,45 @@
+# This is the default ansible 'hosts' file.
+#
+# It should live in /etc/ansible/hosts
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+
+# Ex 1: Ungrouped hosts, specify before any group headers:
+
+
+[myvirtualmachines]
+192.168.122.10    ansible_user=ukleemann
+192.168.122.43    ansible_user=ukleemann
+192.168.122.168   ansible_user=ukleemann
+192.168.122.153   ansible_user=ukleemann
+192.168.122.176   ansible_user=ukleemann
+192.168.122.230   ansible_user=ukleemann
+
+[webservers]
+192.168.122.10
+192.168.122.43      
+192.168.122.153
+192.168.122.168
+192.168.122.230
+
+
+[fedora]
+192.168.122.10
+
+[ubuntu]
+192.168.122.43
+
+[alma-linux]
+192.168.122.168
+
+[centos]
+192.168.122.176    
+
+[debian]
+192.168.122.230
+
+
