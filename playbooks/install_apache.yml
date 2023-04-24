@@ -14,31 +14,30 @@
     apt:
       name: apache2
       state: latest  
-
+    when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: add php support for apache
     apt:
       name: libapache2-mod-php
       state: latest
-
+    when: ansible_distribution in ["Ubuntu", "Debian"]
+    
 
   - name: update repository index for dnf
     dnf:
       update_cache: yes
-
-
+    when: ansible_distribution in ["CentOS", "Fedora", "Alma-Linux"]
   - name: install httpd package for redhat
     dnf:
       name: httpd    
       state: latest
-
+    when: ansible_distribution in ["CentOS", "Fedora", "Alma-Linux"]
   - name: install php support for httpd
 
     dnf:
-      name: libapache2-mod-php
+      name: php
       state: latest
-
-
+    when: ansible_distribution in ["CentOS", "Fedora", "Alma-Linux"]
 
 
 ...
