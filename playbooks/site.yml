@@ -1,0 +1,135 @@
+---                                            # keep al servers up-to-date first
+- hosts: all
+  become: true
+  pre_tasks: 
+  - name: install udates (CentOS)
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (Ubuntu)
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+- hosts: web_servers                        # install apache2 and php on ubuntu hosts that are webservers
+  become: true
+  tasks:  
+
+  - name: install apache2, nginx, rkhunter, chkrootkit, lynis, mrtg and php on ubuntu servers
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php
+        - nginx 
+        - rkhunter
+        - chkrootkit
+        - lynis
+        - mrtg  
+      state: latest 
+    when: ansible_distribution in ["Ubuntu"]
+
+
+  - name: install httpd, nginx, rkhunter, lynis, mrtg and php packages for CentOS 
+    dnf:                                    # install httpd and php on centos hosts that are webservers
+      name: 
+        - httpd
+        - php    
+        - nginx  
+        - rkhunter  
+        - lynis
+        - mrtg    
+      state: latest
+           
+    when: ansible_distribution == "CentOS"  
+
+- hosts: db_servers
+  become: true
+  tasks:
+  - name: install mariadb_package (CentOS)
+    dnf:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "CentOS"
+ 
+  - name: install mariadb_package (Ubuntu) 
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install mariadb_package (Debian)
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Debian"
+
+- hosts: file_servers
+  become: true
+  tasks:
+  - name: install samba_package
+    dnf:
+      name: samba
+      state: latest
+    when: ansible_distribution == "CentOS"
+ 
+- hosts: test_servers
+  become: true
+  tasks:
+  - name: install podman_package
+    dnf:
+      name: podman
+      state: latest
+    when: ansible_distribution == "CentOS"    
+        
+  - name: install fail2ban_package
+    dnf:
+      name: fail2ban
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+
+  - name: install rkhunter_package
+    dnf:
+      name: rkhunter
+      state: latest 
+    when: ansible_distribution == "CentOS"
+
+
+  - name: install vim_package
+    dnf:
+      name: vim
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+
+- hosts: mail_servers
+  become: true
+  tasks:
+  - name: install postfix_package
+    dnf:
+      name: postfix
+      state: latest
+    when: ansible_distribution == "Centos"    
+
+  - name: install dovecot_package    
+    dnf:
+      name: dovecot
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+
+  - name: install vim_package
+    dnf:
+      name: vim
+      state: latest
+    when: ansible_distribution == "CentOS"    
+
+
+
+
+...
+
