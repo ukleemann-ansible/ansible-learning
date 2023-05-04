@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: true
+
+
+  tasks: 
+  
+  - name: install apache2 and php and fail2ban and ufw firewall  packages on redhat and debian/ubuntu
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php 
+        - fail2ban 
+        - ufw  
+      state: latest 
+      update_cache: yes  
+    when: ansible_distribution in ["Ubuntu", "Debian"]
+
+
+  - name: install httpd and php and fail2ban packages for redhat
+    dnf:
+      name: 
+        - httpd
+        - php    
+        - fail2ban     
+      state: latest
+      update_cache: yes     
+    when: ansible_distribution in ["CentOS", "Fedora", "Alma-Linux"]
+
+...

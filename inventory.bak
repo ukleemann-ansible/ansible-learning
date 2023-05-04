@@ -1,0 +1,22 @@
+# This is the default ansible 'hosts' file.
+#
+# It should live in /etc/ansible/hosts
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+
+# Ex 1: Ungrouped hosts, specify before any group headers:
+
+
+[myvirtualmachines]
+192.168.122.17 	apache_package=apache2 php_package=libapache2-mod-php fail2ban_package=fail2ban  ufw_package=ufw   ansible_user=ukleemann
+192.168.122.103 apache_package=httpd php_package=php fail2ban_package=fail2ban  ufw_package=ufw   ansible_user=ukleemann
+192.168.122.196 apache_package=httpd php_package=php fail2ban_package=fail2ban  ufw_package=ufw   ansible_user=ukleemann
+192.168.122.231 apache_package=httpd php_package=php fail2ban_package=fail2ban  ufw_package=ufw   ansible_user=ukleemann
+192.168.122.239 apache_package=apache2 php_package=libapache2-mod-php fail2ban_package=fail2ban  ufw_package=ufw   ansible_user=ukleemann
+
+
+

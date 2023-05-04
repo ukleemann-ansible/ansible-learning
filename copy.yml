@@ -1,0 +1,161 @@
+---                                            # keep al servers up-to-date first
+- hosts: all
+  become: true
+  pre_tasks: 
+  - name: install udates (CentOS)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+- hosts: web_servers                        # install apache2 and php on ubuntu hosts that are webservers
+  become: true
+  tasks:  
+
+  - name: install apache2, nginx, rkhunter, chkrootkit, lynis, mrtg and php on ubuntu servers
+    tags: apache,apache2,ubuntu
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php
+        - nginx 
+        - rkhunter
+        - chkrootkit
+        - lynis
+        - mrtg  
+      state: latest 
+    when: ansible_distribution in ["Ubuntu"]
+
+
+  - name: install httpd, nginx, rkhunter, lynis, mrtg and php packages for CentOS
+    tags: apache,centos,httpd 
+    dnf:                                    # install httpd and php on centos hosts that are webservers
+      name: 
+        - httpd
+        - php    
+        - nginx  
+        - rkhunter  
+        - lynis
+        - mrtg    
+      state: latest
+    when: ansible_distribution == "CentOS"  
+  
+
+  - name: copy default html file for site
+    tags: apache,apache2,httpd
+    copy:  
+      src: default_site.html 
+      dest: /var/www/html/index.html  
+      owner: root
+      group: root
+      mode: 0644 
+
+
+
+- hosts: db_servers
+  become: true
+  tasks:
+  - name: install mariadb_package (CentOS)
+    tags: centos,db,mariadb
+    dnf:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "CentOS"
+ 
+  - name: install mariadb_package (Ubuntu)
+    tags: db,mariadb,ubuntu 
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install mariadb_package (Debian)
+    tags: debian,db,mariadb
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Debian"
+
+- hosts: file_servers
+  become: true
+  tasks:
+  - name: install samba_package
+    tags: samba
+    dnf:
+      name: samba
+      state: latest
+    when: ansible_distribution == "CentOS"
+ 
+- hosts: test_servers
+  become: true
+  tasks:
+  - name: install podman_package
+    tags: podman
+    dnf:
+      name: podman
+      state: latest
+    when: ansible_distribution == "CentOS"    
+        
+  - name: install fail2ban_package
+    tags: fail2ban
+    dnf:
+      name: fail2ban
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+
+  - name: install rkhunter_package
+    tags: rkhunter
+    dnf:
+      name: rkhunter
+      state: latest 
+    when: ansible_distribution == "CentOS"
+
+
+  - name: install vim_package
+    tags: vim
+    dnf:
+      name: vim
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+
+- hosts: mail_servers
+  tags: postfix
+  become: true
+  tasks:
+  - name: install postfix_package
+    dnf:
+      name: postfix
+      state: latest
+    when: ansible_distribution == "Centos"    
+
+  - name: install dovecot_package
+    tags: dovecot    
+    dnf:
+      name: dovecot
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+
+  - name: install vim_package
+    tags: vim
+    dnf:
+      name: vim
+      state: latest
+    when: ansible_distribution == "CentOS"    
+
+
+
+
+...
+
