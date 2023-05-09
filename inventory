@@ -17,7 +17,7 @@
 
 
 [file_servers]
-192.168.122.196   ansible_user=ukleemann	#alma
+192.168.122.111   ansible_user=ukleemann	#alma
 192.168.122.231   ansible_user=ukleemann	#fedora
 
 [db_servers]
@@ -33,4 +33,8 @@
 192.168.122.195   ansible_user=ukleemann        #alma mx1
 192.168.122.247   ansible_user=ukleemann        #alma mx2
 
+[workstations]    
+192.168.122.164   ansible_user=ukleemann 	#debian wks1
+192.168.122.165   ansible_user=ukleemann        #debian wks2
+192.168.122.166   ansible_user=ukleemann        #debian wks3
  

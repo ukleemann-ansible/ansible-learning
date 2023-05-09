@@ -1,6 +1,16 @@
 ---                                            # keep al servers up-to-date first
 - hosts: all
   become: true
+    #vars:
+  #roles:
+  #- role: dns
+  #  dns_servers:
+  #   - 8.8.8.8
+  #    - 92.60.37.213
+  # dns_dnssec: true
+  #  dns_domains:
+  #    - foo.lan
+  #    - bar.lan
   pre_tasks: 
   - name: install udates (CentOS)
     tags: always
@@ -25,12 +35,12 @@
 
     - name: install terraform    
       unarchive: 
-      src: https://releases.hashicorp.com/terraform/0.12.28/terraform_linux_amd64.zip
-      dest: /usr/local/bin
-      remote_src: yes
-      mode:0755
-      owner: root
-      group: root
+        src: https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+        dest: /usr/local/bin
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
 
 
 - hosts: web_servers                        # install apache2 and php on ubuntu hosts that are webservers

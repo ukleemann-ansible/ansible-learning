@@ -15,6 +15,41 @@
       upgrade: dist
       update_cache: yes
     when: ansible_distribution == "Ubuntu"
+  - name: configure dns entries
+    tags: apache,centos,ubuntu,httpd
+    lineinfile:      # allows to change a line in a file 
+      path: /etc/resolv.conf  #path to the file you want to edit
+      regexp: '^nameserver'  # edit a line that begins with nameserver
+      line: nameserver 8.8.8.8, 92.60.37.213 # change it to this e-mail address
+        #when: ansible_distribution == "CentOS" # but do this only, if the host runs on CentOS
+    register: dns # store the changes in a variable called dns
+
+
+
+  tasks:
+
+  - name: create uli  user
+    tags: always
+    user: 
+      name: uli
+      groups: root
+
+  - name: add ssh key for uli
+    tags: always
+    authorized_key:
+      user: uli
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBX/R/uxuI+C2ZUjNoFM8saZy/PRi2aP7jhagEpSSrFv ansible@bechtle
+"
+
+  - name: add sudoers file for uli
+    copy:
+      #src: sudoer_uli
+      content: "uli ALL=(ALL) NOPASSWD:ALL"
+      dest: /etc/sudoers.d/uli
+      owner: root
+      group: root
+      mode: 0440
+        
 
 - hosts: workstations
   become: true
@@ -25,12 +60,12 @@
 
     - name: install terraform    
       unarchive: 
-      src: https://releases.hashicorp.com/terraform/0.12.28/terraform_linux_amd64.zip
-      dest: /usr/local/bin
-      remote_src: yes
-      mode:0755
-      owner: root
-      group: root
+        src: https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+        dest: /usr/local/bin
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
 
 
 - hosts: web_servers                        # install apache2 and php on ubuntu hosts that are webservers

@@ -16,6 +16,22 @@
       update_cache: yes
     when: ansible_distribution == "Ubuntu"
 
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create smith jones wesson  user
+    tags: always
+    user:
+      name: smith jones wesson
+      groups: users
+
+
+
+
+
+
 - hosts: workstations
   become: true
   tasks:
@@ -25,12 +41,12 @@
 
     - name: install terraform    
       unarchive: 
-      src: https://releases.hashicorp.com/terraform/0.12.28/terraform_linux_amd64.zip
-      dest: /usr/local/bin
-      remote_src: yes
-      mode:0755
-      owner: root
-      group: root
+        src: https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+        dest: /usr/local/bin
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
 
 
 - hosts: web_servers                        # install apache2 and php on ubuntu hosts that are webservers

@@ -25,12 +25,12 @@
 
     - name: install terraform    
       unarchive: 
-      src: https://releases.hashicorp.com/terraform/0.12.28/terraform_linux_amd64.zip
-      dest: /usr/local/bin
-      remote_src: yes
-      mode:0755
-      owner: root
-      group: root
+        src: https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+        dest: /usr/local/bin
+        remote_src: yes
+        mode: 0755
+        owner: root
+        group: root
 
 
 - hosts: web_servers                        # install apache2 and php on ubuntu hosts that are webservers
@@ -64,7 +64,31 @@
         - mrtg    
       state: latest
     when: ansible_distribution == "CentOS"  
-  
+
+  - name: start httpd (CentOS)
+    tags: apache,centos,httpd
+    service:
+      name: httpd
+      state: started
+      enabled: yes     # apache will start after reboot   
+    when: ansible_distribution == "CentOS"
+
+  - name: change email-address for admin
+    tags: apache,centos,httpd
+    lineinfile:      # allows to change a line in a file 
+      path: /etc/httpd/conf/httpd.conf  #path to the file you want to edit
+      regexp: '^ServerAdmin'  # edit a line that begins with ServerAdmin
+      line: ServerAdmin ulrich.kleemann@bechtle.com # change it to this e-mail address
+    when: ansible_distribution == "CentOS" # but do this only, if the host runs on CentOS
+    register: httpd # store the changes in a variable called httpd 
+
+
+  - name: restart httpd (CentOS) # restart apache
+    tags: apache,centos,httpd
+    service:
+      name: httpd
+      state: restarted
+    when: httpd.changed # but only if the variable httpd contains a changed statement
 
   - name: copy default html file for site
     tags: apache,apache2,httpd
