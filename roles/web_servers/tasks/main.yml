@@ -1,0 +1,42 @@
+hosts: web_servers                        # install apache2 and php on ubuntu hosts that are webservers
+  become: true
+  tasks:
+
+  - name: install apache2, nginx, rkhunter, chkrootkit, lynis, mrtg and php on ubuntu servers
+    tags: apache,apache2,ubuntu
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+        - nginx
+        - rkhunter
+        - chkrootkit
+        - lynis
+        - mrtg
+      state: latest
+    when: ansible_distribution in ["Ubuntu"]
+
+
+  - name: install httpd, nginx, rkhunter, lynis, mrtg and php packages for CentOS
+    tags: apache,centos,httpd
+    dnf:                                    # install httpd and php on centos hosts that are webservers
+      name:
+        - httpd
+        - php
+        - nginx
+        - rkhunter
+        - lynis
+        - mrtg
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+  - name: copy default html file for site
+    tags: apache,apache2,httpd
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+

@@ -1,0 +1,24 @@
+- hosts: db_servers
+  become: true
+  tasks:
+  - name: install mariadb_package (CentOS)
+    tags: centos,db,mariadb
+    dnf:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+  - name: install mariadb_package (Ubuntu)
+    tags: db,mariadb,ubuntu
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install mariadb_package (Debian)
+    tags: debian,db,mariadb
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Debian"
+

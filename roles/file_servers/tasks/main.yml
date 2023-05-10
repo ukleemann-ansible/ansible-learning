@@ -1,0 +1,11 @@
+- hosts: file_servers
+  become: true
+  tasks:
+  - name: install samba_package
+    tags: samba
+    dnf:
+      name: samba
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+

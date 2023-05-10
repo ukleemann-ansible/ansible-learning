@@ -1,0 +1,28 @@
+- hosts: mail_servers
+  tags: postfix
+  become: true
+  tasks:
+  - name: install postfix_package
+    dnf:
+      name: postfix
+      state: latest
+    when: ansible_distribution == "Centos"
+
+  - name: install dovecot_package
+    tags: dovecot
+    dnf:
+      name: dovecot
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+
+  - name: install vim_package
+    tags: vim
+    dnf:
+      name: vim
+      state: latest
+                            183,21        96%
+
+    when: ansible_distribution == "CentOS"
+
+

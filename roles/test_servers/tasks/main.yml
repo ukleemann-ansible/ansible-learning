@@ -1,0 +1,34 @@
+- hosts: test_servers
+  become: true
+  tasks:
+  - name: install podman_package
+    tags: podman
+    dnf:
+      name: podman
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+  - name: install fail2ban_package
+    tags: fail2ban
+    dnf:
+      name: fail2ban
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+
+  - name: install rkhunter_package
+    tags: rkhunter
+    dnf:
+      name: rkhunter
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+  - name: install vim_package
+    tags: vim
+    dnf:
+      name: vim
+      state: latest
+      when: ansible_distribution == "CentOS"
+
+
+
