@@ -10,5 +10,16 @@
       path: /etc/resolv.conf  #path to the file you want to edit
       regexp: '^nameserver'  # edit a line that begins with nameserver
       line: nameserver 8.8.8.8, 92.60.37.213 # change it to this e-mail address
-    register: dns # store the changes in a variable called dns
+      register: dns # store the changes in a variable called dns
+
+- name: generate sshd_config file from template
+  tags: ssh
+  template:
+    src: "{{ ssh_template_file }}"
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_sshd
+
 

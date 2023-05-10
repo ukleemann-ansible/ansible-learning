@@ -2,14 +2,14 @@
 - hosts: all
   become: true
   pre_tasks: 
-  - name: install udates (CentOS)
+  - name: update repo cache (CentOS)
     tags: always
     dnf:
       update_only: yes
       update_cache: yes
     when: ansible_distribution == "CentOS"
 
-  - name: install updates (Ubuntu)
+  - name: update_repo_cache (Ubuntu)
     tags: always
     apt:
       upgrade: dist
@@ -24,43 +24,36 @@
         #when: ansible_distribution == "CentOS" # but do this only, if the host runs on CentOS
     register: dns # store the changes in a variable called dns
 
-- hosts: all
-  become:true
-  roles:
-    - base
-
-- hosts: workstations
-  become: true
-  roles:
-    - workstations
-
-- hosts: webservers
-  become: true
-  roles:
-    - webservers
-
-- hosts: db_servers
-  become: true
-  roles:
-    - db_servers
-
-- hosts: file_servers
-  become: true
-  roles: 
-    - file_servers
-
-- hosts: test_servers
-  become: true
-  roles: 
-    - test_servers
 
 
-- hosts: mail_servers
-  become: true
-  roles:
-    - mail_servers
+  tasks:
 
-    
-    
+  - name: create uli  user
+    tags: always
+    user: 
+      name: uli
+      groups: root
+
+  - name: add ssh key for uli
+    tags: always
+    authorized_key:
+      user: uli
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBX/R/uxuI+C2ZUjNoFM8saZy/PRi2aP7jhagEpSSrFv ansible@bechtle
+"
+
+  - name: add sudoers file for uli
+    copy:
+      #src: sudoer_uli
+      content: "uli ALL=(ALL) NOPASSWD:ALL"
+      dest: /etc/sudoers.d/uli
+      owner: root
+      group: root
+      mode: 0440
+        
+
+
+
+
+
 ...
 
